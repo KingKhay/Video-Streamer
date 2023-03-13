@@ -1,0 +1,43 @@
+package com.khaydev.videostream.app.controller.user;
+
+import com.khaydev.videostream.app.dto.UserDTO;
+import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    private final UserService service;
+
+    @Autowired
+    public UserController(UserService service) {
+        this.service = service;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable UUID id){
+        return service.findUserById(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/")
+    public List<User> getUsers(){
+        return service.findAllUsers();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/")
+    public UserDTO registerUser(@Valid @RequestBody User user){
+
+        return service.save(user);
+    }
+}
