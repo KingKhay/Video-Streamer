@@ -1,14 +1,18 @@
 package com.khaydev.videostream.aws.service;
 
 import com.amazonaws.services.s3.model.Bucket;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface AWSService {
 
-    public void createS3Bucket(String bucketName);
+    void createS3Bucket(String bucketName);
 
-    public List<Bucket> listBuckets();
+    List<Bucket> listBuckets();
 
-    public void deleteBucket(String bucketName);
+    void deleteBucket(String bucketName);
+
+    String saveVideo(MultipartFile file);
+
 }

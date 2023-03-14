@@ -20,9 +20,6 @@ public class UserDTO {
     private String username;
 
     @NotBlank
-    private String password;
-
-    @NotBlank
     private String firstName;
 
     @NotBlank

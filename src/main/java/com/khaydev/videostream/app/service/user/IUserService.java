@@ -1,4 +1,4 @@
-package com.khaydev.videostream.app.service;
+package com.khaydev.videostream.app.service.user;
 
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
@@ -41,28 +41,26 @@ public class IUserService implements  UserService{
     }
 
     @Override
-    public User updateUser(User userDetails, UUID id) {
+    public UserDTO updateUser(UserDTO userDetails, UUID id) {
         User user = repository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
-        return extractNewDetailsAndUpdateUser(user, userDetails);
+        user.setUsername(userDetails.getUsername());
+        user.setFirstName(userDetails.getFirstName());
+        user.setLastName(userDetails.getLastName());
+        user.setDob(userDetails.getDob());
+
+        repository.save(user);
+
+        return userDetails;
     }
 
     @Override
-    public User deletUser(UUID id) {
+    public UserDTO deletUser(UUID id) {
         User user = repository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
         repository.deleteById(id);
-        return user;
-    }
-
-    public User extractNewDetailsAndUpdateUser(User oldDetails, User newDetails){
-        oldDetails.setUsername(newDetails == null ? oldDetails.getUsername() : newDetails.getUsername());
-        oldDetails.setLastName(newDetails == null ? oldDetails.getLastName() : newDetails.getLastName());
-        oldDetails.setFirstName(newDetails == null ? oldDetails.getFirstName() : newDetails.getFirstName());
-        oldDetails.setDob(newDetails == null ? oldDetails.getDob() : newDetails.getDob());
-
-        return oldDetails;
+        return objectMapper.convertUserToUserDTO(user);
     }
 }

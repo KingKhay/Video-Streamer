@@ -1,7 +1,9 @@
 package com.khaydev.videostream.app.utils;
 
 import com.khaydev.videostream.app.dto.UserDTO;
+import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.model.VideoDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,7 +12,6 @@ public class EntityObjectMapperImpl implements EntityObjectMapper{
     public UserDTO convertUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(user.getPassword());
         userDTO.setDob(user.getDob());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
@@ -24,10 +25,18 @@ public class EntityObjectMapperImpl implements EntityObjectMapper{
         User user = new User();
         user.setDob(userDTO.getDob());
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
 
         return user;
+    }
+
+    @Override
+    public VideoDTO convertVideoDetailsToVideoDTO(VideoDetails videoDetails) {
+        return new VideoDTO(
+                videoDetails.getVideoId(),
+                videoDetails.getVideoName(),
+                videoDetails.getResourceUrl()
+        );
     }
 }

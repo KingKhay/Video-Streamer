@@ -2,7 +2,7 @@ package com.khaydev.videostream.app.controller.user;
 
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.model.User;
-import com.khaydev.videostream.app.service.UserService;
+import com.khaydev.videostream.app.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,14 +30,25 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    public List<User> getUsers(){
+    public List<User> findAllUsers(){
         return service.findAllUsers();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/")
     public UserDTO registerUser(@Valid @RequestBody User user){
-
         return service.save(user);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{id}")
+    public UserDTO updateUser(@Valid @RequestBody UserDTO user, @PathVariable UUID id){
+        return service.updateUser(user, id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{id}")
+    public UserDTO deleteUser(@PathVariable UUID id){
+        return service.deletUser(id);
     }
 }

@@ -1,11 +1,16 @@
 package com.khaydev.videostream.app.utils;
 
 import com.khaydev.videostream.app.dto.UserDTO;
+import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.model.VideoDetails;
 
 public interface EntityObjectMapper {
 
-    public UserDTO convertUserToUserDTO(User user);
+    UserDTO convertUserToUserDTO(User user);
 
-    public User convertUserDTOToUser(UserDTO userDTO);
+    User convertUserDTOToUser(UserDTO userDTO);
+
+    VideoDTO convertVideoDetailsToVideoDTO(VideoDetails videoDetails);
+
 }
