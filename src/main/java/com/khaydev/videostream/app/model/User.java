@@ -56,6 +56,12 @@ public class User {
 
     private String imageUrl;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateUploaded;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateUpdated;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<VideoDetails> videosUploaded;
 
@@ -67,5 +73,15 @@ public class User {
 
         videosUploaded.add(video);
         video.setUser(this);
+    }
+
+    @PrePersist
+    protected void onUpload(){
+        this.dateUploaded = LocalDate.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.dateUpdated = LocalDate.now();
     }
 }
