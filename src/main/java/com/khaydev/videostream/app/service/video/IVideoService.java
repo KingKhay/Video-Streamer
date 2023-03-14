@@ -19,7 +19,6 @@ import java.util.UUID;
 @Service
 public class IVideoService implements  VideoService {
 
-    private final AmazonS3 s3Client;
 
     private final UserRepository userRepository;
 
@@ -30,12 +29,11 @@ public class IVideoService implements  VideoService {
     private final AWSService awsService;
 
 
-    public IVideoService(AmazonS3 s3Client,
+    public IVideoService(
                          UserRepository userRepository,
                          VideoRepository videoRepository,
                          EntityObjectMapper mapper,
                          AWSService service) {
-        this.s3Client = s3Client;
         this.userRepository = userRepository;
         this.videoRepository = videoRepository;
         this.objectMapper = mapper;
@@ -43,23 +41,23 @@ public class IVideoService implements  VideoService {
     }
 
     @Override
-    public VideoDTO uploadVideo(MultipartFile file, VideoDetails videoDetails, UUID id) {
+    public VideoDTO uploadVideo(MultipartFile file,
+                                String videoName,
+                                UUID id) {
 
         User user =  userRepository
                 .findById(id).orElseThrow(UserNotFoundException::new);
 
         String resourceUrl = awsService.saveVideo(file);
+
+        VideoDetails videoDetails = new VideoDetails();
         videoDetails.setResourceUrl(resourceUrl);
+        videoDetails.setVideoName(videoName);
 
         user.addVideo(videoDetails);
 
         userRepository.save(user);
         return objectMapper.convertVideoDetailsToVideoDTO(videoDetails);
-    }
-
-    @Override
-    public VideoDTO downloadVideo(UUID id) {
-        return null;
     }
 
     @Override

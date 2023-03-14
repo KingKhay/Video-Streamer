@@ -9,11 +9,10 @@ import java.util.UUID;
 
 public interface VideoService {
 
-    VideoDTO uploadVideo(MultipartFile file, VideoDetails videoDetails, UUID id);
-
-    VideoDTO downloadVideo(UUID id);
+    VideoDTO uploadVideo(MultipartFile file, String videoName, UUID id);
 
     VideoDTO getVideo(UUID id);
 
     List<VideoDetails> findAll();
+
 }

@@ -1,52 +1,44 @@
 package com.khaydev.videostream.app.controller.video;
 
+import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.model.VideoDetails;
 import com.khaydev.videostream.app.repository.UserRepository;
 import com.khaydev.videostream.app.repository.VideoRepository;
+import com.khaydev.videostream.app.service.video.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("api/videos")
 public class VideoController {
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private VideoRepository repository;
+    private final VideoService videoService;
+
+    public VideoController(VideoService videoService) {
+        this.videoService = videoService;
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/")
-    public String saveVideo(VideoDetails video){
+    @PostMapping("/{id}")
+    public VideoDTO saveVideo(@RequestParam("file") MultipartFile file,
+                              @RequestParam("name") String name,
+                              @PathVariable UUID id){
 
-        System.out.println(video);
-
-        UUID id = UUID.fromString("46842306-3c63-4da9-9209-352b9db5e91e");
-        User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
-
-        video.setUser(user);
-        repository.save(video);
-
-
-        user.getVideosUploaded().add(video);
-        userRepository.save(user);
-        return "Video saved for user " + id.toString();
+        return videoService.uploadVideo(file, name, id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    public String findAll(){
-       List<VideoDetails> videos = repository.findAll();
-
-       videos.forEach(System.out::println);
-       return "All the videos";
+    public List<VideoDetails> findAll(){
+       return videoService.findAll();
     }
 }

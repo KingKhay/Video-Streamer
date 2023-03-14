@@ -10,9 +10,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -59,12 +57,12 @@ public class User {
     private String imageUrl;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<VideoDetails> videosUploaded;
+    private List<VideoDetails> videosUploaded;
 
 
     public void addVideo(VideoDetails video){
         if (videosUploaded == null) {
-            videosUploaded = new HashSet<>();
+            videosUploaded = new ArrayList<>();
         }
 
         videosUploaded.add(video);

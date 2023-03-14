@@ -1,7 +1,9 @@
 package com.khaydev.videostream.app.controller.user;
 
 import com.khaydev.videostream.app.dto.UserDTO;
+import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.model.VideoDetails;
 import com.khaydev.videostream.app.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public User getUser(@PathVariable UUID id){
+    public UserDTO getUser(@PathVariable UUID id){
         return service.findUserById(id);
     }
 
@@ -49,6 +51,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public UserDTO deleteUser(@PathVariable UUID id){
-        return service.deletUser(id);
+        return service.deleteUser(id);
+    }
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}/videos")
+    public List<VideoDTO> getAllVideos(@PathVariable UUID id){
+        return service.findVideos(id);
     }
 }

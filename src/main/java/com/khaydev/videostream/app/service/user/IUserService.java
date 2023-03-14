@@ -1,8 +1,10 @@
 package com.khaydev.videostream.app.service.user;
 
 import com.khaydev.videostream.app.dto.UserDTO;
+import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.model.VideoDetails;
 import com.khaydev.videostream.app.repository.UserRepository;
 import com.khaydev.videostream.app.utils.EntityObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class IUserService implements  UserService{
@@ -31,8 +34,11 @@ public class IUserService implements  UserService{
     }
 
     @Override
-    public User findUserById(UUID id) {
-        return repository.findById(id).orElseThrow(UserNotFoundException::new);
+    public UserDTO findUserById(UUID id) {
+        User user = repository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        return objectMapper.convertUserToUserDTO(user);
     }
 
     @Override
@@ -56,11 +62,22 @@ public class IUserService implements  UserService{
     }
 
     @Override
-    public UserDTO deletUser(UUID id) {
+    public UserDTO deleteUser(UUID id) {
         User user = repository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
         repository.deleteById(id);
         return objectMapper.convertUserToUserDTO(user);
+    }
+
+    @Override
+    public List<VideoDTO> findVideos(UUID id) {
+        User user = repository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        return user.getVideosUploaded()
+                .stream()
+                .map(objectMapper::convertVideoDetailsToVideoDTO)
+                .toList();
     }
 }
