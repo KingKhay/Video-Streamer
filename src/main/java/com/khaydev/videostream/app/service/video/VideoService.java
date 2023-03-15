@@ -1,6 +1,7 @@
 package com.khaydev.videostream.app.service.video;
 
 import com.khaydev.videostream.app.dto.VideoDTO;
+import com.khaydev.videostream.app.model.Comment;
 import com.khaydev.videostream.app.model.VideoDetails;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,4 +16,7 @@ public interface VideoService {
 
     List<VideoDetails> findAll();
 
+    void addComment(UUID id, Comment comment);
+
+    List<Comment> findAllComments(UUID id);
 }

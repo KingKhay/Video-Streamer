@@ -3,6 +3,7 @@ package com.khaydev.videostream.app.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -39,6 +40,7 @@ public class Comment {
     @JoinColumn(name = "video_id", nullable = false)
     private VideoDetails video;
 
+    @NotNull
     private String username;
 
 

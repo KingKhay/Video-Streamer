@@ -1,9 +1,9 @@
 package com.khaydev.videostream.app.service.video;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.exception.video.VideoNotFoundException;
+import com.khaydev.videostream.app.model.Comment;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.model.VideoDetails;
 import com.khaydev.videostream.app.repository.UserRepository;
@@ -71,5 +71,22 @@ public class IVideoService implements  VideoService {
     @Override
     public List<VideoDetails> findAll() {
         return videoRepository.findAll();
+    }
+
+    @Override
+    public void addComment(UUID id, Comment comment) {
+        VideoDetails videoDetails = videoRepository.findById(id)
+                .orElseThrow(VideoNotFoundException::new);
+
+        videoDetails.addComment(comment);
+        videoRepository.save(videoDetails);
+    }
+
+    @Override
+    public List<Comment> findAllComments(UUID id) {
+        VideoDetails videoDetails = videoRepository.findById(id)
+                .orElseThrow(VideoNotFoundException::new);
+
+        return videoDetails.getComments();
     }
 }
