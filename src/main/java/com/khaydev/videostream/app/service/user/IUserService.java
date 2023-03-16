@@ -40,8 +40,11 @@ public class IUserService implements  UserService{
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return repository.findAll();
+    public List<UserDTO> findAllUsers() {
+        return repository.findAll()
+                .stream()
+                .map(user -> objectMapper.convertUserToUserDTO(user))
+                .toList();
     }
 
     @Override
@@ -77,5 +80,12 @@ public class IUserService implements  UserService{
                 .stream()
                 .map(objectMapper::convertVideoDetailsToVideoDTO)
                 .toList();
+    }
+
+    public UserDTO findUserByUsername(String username){
+        User user = repository.findUserByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
+
+        return objectMapper.convertUserToUserDTO(user);
     }
 }

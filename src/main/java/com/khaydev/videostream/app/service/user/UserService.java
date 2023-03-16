@@ -13,11 +13,13 @@ public interface UserService {
 
     UserDTO findUserById(UUID id);
 
-    List<User> findAllUsers();
+    List<UserDTO> findAllUsers();
 
     UserDTO updateUser(UserDTO user, UUID id);
 
     UserDTO deleteUser(UUID id);
 
     List<VideoDTO> findVideos(UUID id);
+
+    UserDTO findUserByUsername(String username);
 }

@@ -32,7 +32,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    public List<User> findAllUsers(){
+    public List<UserDTO> findAllUsers(){
         return service.findAllUsers();
     }
 
@@ -57,5 +57,11 @@ public class UserController {
     @GetMapping("/{id}/videos")
     public List<VideoDTO> getAllVideos(@PathVariable UUID id){
         return service.findVideos(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/username/{username}")
+    public UserDTO findUserByUsername(@PathVariable String username){
+        return service.findUserByUsername(username);
     }
 }
