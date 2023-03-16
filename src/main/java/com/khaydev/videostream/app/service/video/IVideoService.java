@@ -1,5 +1,6 @@
 package com.khaydev.videostream.app.service.video;
 
+import com.khaydev.videostream.app.dto.CommentDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.exception.video.VideoNotFoundException;
@@ -8,8 +9,11 @@ import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.model.VideoDetails;
 import com.khaydev.videostream.app.repository.UserRepository;
 import com.khaydev.videostream.app.repository.VideoRepository;
-import com.khaydev.videostream.app.utils.EntityObjectMapper;
+import com.khaydev.videostream.app.utils.mapper.EntityObjectMapper;
 import com.khaydev.videostream.aws.service.AWSService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -83,10 +87,31 @@ public class IVideoService implements  VideoService {
     }
 
     @Override
-    public List<Comment> findAllComments(UUID id) {
+    public List<CommentDTO> findAllComments(UUID id) {
         VideoDetails videoDetails = videoRepository.findById(id)
                 .orElseThrow(VideoNotFoundException::new);
 
-        return videoDetails.getComments();
+        return videoDetails.getComments()
+                .stream()
+                .map(objectMapper::convertCommentToCommentDTO)
+                .toList();
+    }
+
+    @Override
+    public List<VideoDTO> findVideosWithSorting(String fieldToSortBy) {
+        return videoRepository.findAll(Sort.by(fieldToSortBy))
+                .stream()
+                .map(objectMapper::convertVideoDetailsToVideoDTO)
+                .toList();
+    }
+
+    @Override
+    public List<VideoDTO> findVideosWithPagination(int pageNumber, int numberOfRecordsPerPage) {
+
+        Page<VideoDetails> videos = videoRepository.findAll(PageRequest.of(pageNumber, numberOfRecordsPerPage));
+        return videos.getContent()
+                .stream()
+                .map(objectMapper::convertVideoDetailsToVideoDTO)
+                .toList();
     }
 }

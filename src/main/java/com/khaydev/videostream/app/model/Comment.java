@@ -15,6 +15,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Comment {
 
     @Id
@@ -31,7 +32,7 @@ public class Comment {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate commentDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {
+    @ManyToOne(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.DETACH,

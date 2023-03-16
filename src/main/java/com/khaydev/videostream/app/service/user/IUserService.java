@@ -4,15 +4,13 @@ import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.User;
-import com.khaydev.videostream.app.model.VideoDetails;
 import com.khaydev.videostream.app.repository.UserRepository;
-import com.khaydev.videostream.app.utils.EntityObjectMapper;
+import com.khaydev.videostream.app.utils.mapper.EntityObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class IUserService implements  UserService{

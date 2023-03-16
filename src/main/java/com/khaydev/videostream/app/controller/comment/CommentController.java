@@ -1,9 +1,11 @@
 package com.khaydev.videostream.app.controller.comment;
 
+import com.khaydev.videostream.app.dto.CommentDTO;
 import com.khaydev.videostream.app.service.comment.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,5 +22,11 @@ public class CommentController {
     @DeleteMapping("/{id}")
     public void deleteComment(@PathVariable UUID id){
         service.deleteComment(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public List<CommentDTO> findCommentsByVideo(@PathVariable UUID id){
+        return service.findCommentByVideo(id);
     }
 }

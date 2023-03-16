@@ -1,7 +1,9 @@
-package com.khaydev.videostream.app.utils;
+package com.khaydev.videostream.app.utils.mapper;
 
+import com.khaydev.videostream.app.dto.CommentDTO;
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
+import com.khaydev.videostream.app.model.Comment;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.model.VideoDetails;
 import org.springframework.stereotype.Service;
@@ -21,22 +23,16 @@ public class EntityObjectMapperImpl implements EntityObjectMapper{
     }
 
     @Override
-    public User convertUserDTOToUser(UserDTO userDTO) {
-        User user = new User();
-        user.setDob(userDTO.getDob());
-        user.setUsername(userDTO.getUsername());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-
-        return user;
-    }
-
-    @Override
     public VideoDTO convertVideoDetailsToVideoDTO(VideoDetails videoDetails) {
         return new VideoDTO(
                 videoDetails.getVideoId(),
                 videoDetails.getVideoName(),
                 videoDetails.getResourceUrl()
         );
+    }
+
+    @Override
+    public CommentDTO convertCommentToCommentDTO(Comment comment) {
+        return new CommentDTO(comment.getId(), comment.getMessage());
     }
 }

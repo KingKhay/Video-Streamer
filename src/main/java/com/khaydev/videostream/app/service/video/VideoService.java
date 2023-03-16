@@ -1,5 +1,6 @@
 package com.khaydev.videostream.app.service.video;
 
+import com.khaydev.videostream.app.dto.CommentDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.model.Comment;
 import com.khaydev.videostream.app.model.VideoDetails;
@@ -18,5 +19,9 @@ public interface VideoService {
 
     void addComment(UUID id, Comment comment);
 
-    List<Comment> findAllComments(UUID id);
+    List<CommentDTO> findAllComments(UUID id);
+
+    List<VideoDTO> findVideosWithSorting(String fieldToSortBy);
+
+    List<VideoDTO> findVideosWithPagination(int pageNumber, int numberOfRecordsPerPage);
 }

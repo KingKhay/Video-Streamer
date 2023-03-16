@@ -46,9 +46,7 @@ public class VideoDetails {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(cascade = {
-            CascadeType.ALL
-    },fetch = FetchType.EAGER, mappedBy = "video")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "video")
     private List<Comment> comments;
 
     @PrePersist

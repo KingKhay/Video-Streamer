@@ -1,5 +1,6 @@
 package com.khaydev.videostream.app.controller.video;
 
+import com.khaydev.videostream.app.dto.CommentDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.Comment;
@@ -57,7 +58,21 @@ public class VideoController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/comments")
-    public List<Comment> getAllComments(@PathVariable UUID id){
+    public List<CommentDTO> getAllComments(@PathVariable UUID id){
         return videoService.findAllComments(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{field}")
+    public List<VideoDTO> getVideosSortedByField(@PathVariable String field){
+        return videoService.findVideosWithSorting(field);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/page")
+    public List<VideoDTO> getVideosWithPagination(@RequestParam ("offset") int pageNumber,
+                                                  @RequestParam ("limit") int numberOfRecordsPerPage){
+        return videoService.findVideosWithPagination(pageNumber, numberOfRecordsPerPage);
+
     }
 }
