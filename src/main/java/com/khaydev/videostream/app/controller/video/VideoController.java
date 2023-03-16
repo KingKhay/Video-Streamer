@@ -63,7 +63,7 @@ public class VideoController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{field}")
+    @GetMapping("/field/{field}")
     public List<VideoDTO> getVideosSortedByField(@PathVariable String field){
         return videoService.findVideosWithSorting(field);
     }
