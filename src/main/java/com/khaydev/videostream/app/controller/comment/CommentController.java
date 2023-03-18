@@ -18,11 +18,6 @@ public class CommentController {
         this.service = service;
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    public void deleteComment(@PathVariable UUID id){
-        service.deleteComment(id);
-    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
