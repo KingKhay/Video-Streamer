@@ -3,10 +3,11 @@ package com.khaydev.videostream.app.service.user;
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
+import com.khaydev.videostream.app.model.Role;
 import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.repository.RoleRepository;
 import com.khaydev.videostream.app.repository.UserRepository;
 import com.khaydev.videostream.app.utils.mapper.EntityObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,17 +16,24 @@ import java.util.UUID;
 @Service
 public class IUserService implements  UserService{
 
+    private final String roleUser = "ROLE_USER";
+
     private final UserRepository repository;
     private final EntityObjectMapper objectMapper;
 
-    @Autowired
-    public IUserService(UserRepository repository, EntityObjectMapper mapper) {
+    private final RoleRepository roleRepository;
+
+    public IUserService(UserRepository repository, EntityObjectMapper objectMapper, RoleRepository roleRepository) {
         this.repository = repository;
-        this.objectMapper = mapper;
+        this.objectMapper = objectMapper;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public UserDTO save(User user) {
+        Role userRole = roleRepository.getRoleByName(roleUser);
+        user.getRoles().add(userRole);
+
         repository.save(user);
 
         return objectMapper.convertUserToUserDTO(user);

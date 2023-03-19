@@ -31,8 +31,26 @@ create table video_details (
                                primary key (video_id)
 );
 
+CREATE TABLE `role` (
+                         `id` binary(16) NOT NULL,
+                         `name` varchar(45) NOT NULL,
+                         PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `users_roles` (
+                               `user_id` binary(16) NOT NULL,
+                               `role_id` binary(16) NOT NULL,
+                               KEY `user_fk_idx` (`user_id`),
+                               KEY `role_fk_idx` (`role_id`),
+                               CONSTRAINT `role_fk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+                               CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+);
+
 alter table user
     add constraint UKf9dvvibvpfsldnu8wh3enop4i unique (username, email);
+
+alter table role
+    add constraint uk_name unique (name);
 
 alter table comment
     add constraint FK2frraphlrgpo8ex9s7ax6w62c
