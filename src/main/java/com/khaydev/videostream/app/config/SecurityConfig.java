@@ -11,7 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 @EnableWebSecurity
@@ -19,8 +18,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http
-                .csrf().disable();
+        http.csrf().disable();
         http.sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
