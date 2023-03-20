@@ -51,7 +51,7 @@ public class IUserService implements  UserService{
     public List<UserDTO> findAllUsers() {
         return repository.findAll()
                 .stream()
-                .map(user -> objectMapper.convertUserToUserDTO(user))
+                .map(objectMapper::convertUserToUserDTO)
                 .toList();
     }
 
