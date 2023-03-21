@@ -3,11 +3,11 @@ package com.khaydev.videostream.app.controller.user;
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.model.User;
-import com.khaydev.videostream.app.model.VideoDetails;
 import com.khaydev.videostream.app.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,42 +26,45 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public UserDTO getUser(@PathVariable UUID id){
-        return service.findUserById(id);
+    public ResponseEntity<UserDTO> getUser(@PathVariable UUID id){
+        UserDTO user = service.findUserById(id);
+        return ResponseEntity.ok(user);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    public List<UserDTO> findAllUsers(){
-        return service.findAllUsers();
+    public ResponseEntity<List<UserDTO>> findAllUsers(){
+        List<UserDTO> users = service.findAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/")
-    public UserDTO registerUser(@Valid @RequestBody User user){
-        return service.save(user);
+    public ResponseEntity<String> registerUser(@Valid @RequestBody User user){
+        service.save(user);
+        return new ResponseEntity<>("User Successfully Saved", HttpStatus.CREATED);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public UserDTO updateUser(@Valid @RequestBody UserDTO user, @PathVariable UUID id){
-        return service.updateUser(user, id);
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO user, @PathVariable UUID id){
+        return ResponseEntity.ok(service.updateUser(user, id));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public UserDTO deleteUser(@PathVariable UUID id){
-        return service.deleteUser(id);
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable UUID id){
+        return ResponseEntity.ok(service.deleteUser(id));
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/videos")
-    public List<VideoDTO> getAllVideos(@PathVariable UUID id){
-        return service.findVideos(id);
+    public ResponseEntity<List<VideoDTO>> getAllVideos(@PathVariable UUID id){
+        return ResponseEntity.ok(service.findVideos(id));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/username/{username}")
-    public UserDTO findUserByUsername(@PathVariable String username){
-        return service.findUserByUsername(username);
+    public ResponseEntity<UserDTO> findUserByUsername(@PathVariable String username){
+        return ResponseEntity.ok(service.findUserByUsername(username));
     }
 }

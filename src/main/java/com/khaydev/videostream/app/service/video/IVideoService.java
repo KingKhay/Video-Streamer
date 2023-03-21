@@ -106,7 +106,7 @@ public class IVideoService implements  VideoService {
     }
 
     @Override
-    public List<VideoDTO> findVideosWithPagination(int pageNumber, int numberOfRecordsPerPage) {
+    public List<VideoDTO> findVideosWithPagination(short pageNumber, short numberOfRecordsPerPage) {
 
         Page<VideoDetails> videos = videoRepository.findAll(PageRequest.of(pageNumber, numberOfRecordsPerPage));
         return videos.getContent()

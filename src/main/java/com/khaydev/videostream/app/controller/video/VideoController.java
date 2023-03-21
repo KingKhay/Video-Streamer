@@ -1,6 +1,7 @@
 package com.khaydev.videostream.app.controller.video;
 
 import com.khaydev.videostream.app.dto.CommentDTO;
+import com.khaydev.videostream.app.dto.PageDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.Comment;
@@ -31,23 +32,23 @@ public class VideoController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}")
-    public VideoDTO saveVideo(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<VideoDTO> saveVideo(@RequestParam("file") MultipartFile file,
                               @RequestParam("name") String name,
                               @PathVariable UUID id){
 
-        return videoService.uploadVideo(file, name, id);
+        return new ResponseEntity<>(videoService.uploadVideo(file, name, id), HttpStatus.CREATED);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    public List<VideoDetails> findAll(){
-       return videoService.findAll();
+    public ResponseEntity<List<VideoDetails>> findAll(){
+       return ResponseEntity.ok(videoService.findAll());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public VideoDTO getVideo(@PathVariable UUID id){
-        return videoService.getVideo(id);
+    public ResponseEntity<VideoDTO> getVideo(@PathVariable UUID id){
+        return ResponseEntity.ok(videoService.getVideo(id));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -58,21 +59,20 @@ public class VideoController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/comments")
-    public List<CommentDTO> getAllComments(@PathVariable UUID id){
-        return videoService.findAllComments(id);
+    public ResponseEntity<List<CommentDTO>> getAllComments(@PathVariable UUID id){
+        return ResponseEntity.ok(videoService.findAllComments(id));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/field/{field}")
-    public List<VideoDTO> getVideosSortedByField(@PathVariable String field){
-        return videoService.findVideosWithSorting(field);
+    public ResponseEntity<List<VideoDTO>> getVideosSortedByField(@PathVariable String field){
+        return ResponseEntity.ok(videoService.findVideosWithSorting(field));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/page")
-    public List<VideoDTO> getVideosWithPagination(@RequestParam ("offset") int pageNumber,
-                                                  @RequestParam ("limit") int numberOfRecordsPerPage){
-        return videoService.findVideosWithPagination(pageNumber, numberOfRecordsPerPage);
+    public List<VideoDTO> getVideosWithPagination(@RequestBody PageDTO pageDTO){
+        return videoService.findVideosWithPagination(pageDTO.getOffset(), pageDTO.getLimit());
 
     }
 }

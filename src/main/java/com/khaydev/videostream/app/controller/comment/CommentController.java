@@ -3,6 +3,7 @@ package com.khaydev.videostream.app.controller.comment;
 import com.khaydev.videostream.app.dto.CommentDTO;
 import com.khaydev.videostream.app.service.comment.CommentService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,8 @@ public class CommentController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public List<CommentDTO> findCommentsByVideo(@PathVariable UUID id){
-        return service.findCommentByVideo(id);
+    public ResponseEntity<List<CommentDTO>> findCommentsByVideo(@PathVariable UUID id){
+        List<CommentDTO> comments = service.findCommentByVideo(id);
+        return ResponseEntity.ok(comments);
     }
 }

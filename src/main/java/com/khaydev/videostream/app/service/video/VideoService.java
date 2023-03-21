@@ -23,5 +23,5 @@ public interface VideoService {
 
     List<VideoDTO> findVideosWithSorting(String fieldToSortBy);
 
-    List<VideoDTO> findVideosWithPagination(int pageNumber, int numberOfRecordsPerPage);
+    List<VideoDTO> findVideosWithPagination(short pageNumber, short numberOfRecordsPerPage);
 }
