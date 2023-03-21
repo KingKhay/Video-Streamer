@@ -1,8 +1,7 @@
 package com.khaydev.videostream.app.filter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.khaydev.videostream.app.dto.LoginDTO;
 import com.khaydev.videostream.app.model.Role;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.utils.jwt.JwtUtils;
@@ -10,7 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +17,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +30,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         this.authenticationManager = authenticationManager1;
         this.jwtUtils = jwtUtils;
     }
+    @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
+        LoginDTO credentials = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
 
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
+        String username = credentials.getUsername();
+        String password = credentials.getPassword();
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                 = new UsernamePasswordAuthenticationToken(username,password,null);
