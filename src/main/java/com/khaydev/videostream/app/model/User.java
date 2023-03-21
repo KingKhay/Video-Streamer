@@ -17,11 +17,11 @@ import java.util.*;
         @UniqueConstraint(
                 columnNames = {"username","email"})
 })
-@ToString
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
 
     @Id

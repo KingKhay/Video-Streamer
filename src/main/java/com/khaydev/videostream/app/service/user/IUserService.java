@@ -1,5 +1,6 @@
 package com.khaydev.videostream.app.service.user;
 
+import com.khaydev.videostream.app.dto.RegisterResponse;
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
@@ -7,14 +8,19 @@ import com.khaydev.videostream.app.model.Role;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.repository.RoleRepository;
 import com.khaydev.videostream.app.repository.UserRepository;
+import com.khaydev.videostream.app.utils.jwt.JwtUtils;
 import com.khaydev.videostream.app.utils.mapper.EntityObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class IUserService implements  UserService{
+
+    private final JwtUtils jwtUtils;
 
     private final String roleUser = "ROLE_USER";
 
@@ -23,20 +29,23 @@ public class IUserService implements  UserService{
 
     private final RoleRepository roleRepository;
 
-    public IUserService(UserRepository repository, EntityObjectMapper objectMapper, RoleRepository roleRepository) {
-        this.repository = repository;
-        this.objectMapper = objectMapper;
-        this.roleRepository = roleRepository;
-    }
-
     @Override
-    public UserDTO save(User user) {
+    public RegisterResponse save(User user) {
         Role userRole = roleRepository.getRoleByName(roleUser);
         user.getRoles().add(userRole);
 
         repository.save(user);
 
-        return objectMapper.convertUserToUserDTO(user);
+        List<String> roles = user.getRoles().stream()
+                .map(role -> role.getName())
+                .toList();
+
+        String token = jwtUtils.createJwt(user.getUsername(),roles);
+
+        return RegisterResponse.builder()
+                .username(user.getUsername())
+                .jwtToken(token)
+                .build();
     }
 
     @Override

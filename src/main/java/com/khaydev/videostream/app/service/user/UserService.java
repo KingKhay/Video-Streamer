@@ -1,5 +1,6 @@
 package com.khaydev.videostream.app.service.user;
 
+import com.khaydev.videostream.app.dto.RegisterResponse;
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.model.User;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-    UserDTO save(User user);
+    RegisterResponse save(User user);
 
     UserDTO findUserById(UUID id);
 

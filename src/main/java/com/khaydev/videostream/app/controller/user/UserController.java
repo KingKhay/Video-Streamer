@@ -2,10 +2,9 @@ package com.khaydev.videostream.app.controller.user;
 
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
-import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.service.user.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +14,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService service;
 
-    @Autowired
-    public UserController(UserService service) {
-        this.service = service;
-    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
@@ -36,13 +32,6 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> findAllUsers(){
         List<UserDTO> users = service.findAllUsers();
         return ResponseEntity.ok(users);
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody User user){
-        service.save(user);
-        return new ResponseEntity<>("User Successfully Saved", HttpStatus.CREATED);
     }
 
     @ResponseStatus(HttpStatus.OK)
