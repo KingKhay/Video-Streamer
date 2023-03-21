@@ -15,22 +15,23 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
-        this.authenticationManager = authenticationManager;
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager1, JwtUtils jwtUtils) {
+        this.authenticationManager = authenticationManager1;
         this.jwtUtils = jwtUtils;
+
+        setFilterProcessesUrl("/api/login");
     }
+
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {

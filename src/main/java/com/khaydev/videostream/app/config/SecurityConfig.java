@@ -1,14 +1,13 @@
 package com.khaydev.videostream.app.config;
 
-import com.khaydev.videostream.app.filter.CustomAuthenticationFilter;
 import com.khaydev.videostream.app.filter.JwtAuthFilter;
+import com.khaydev.videostream.app.utils.jwt.JwtUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     public static final String[] ENDPOINT_WHITELIST = {
@@ -28,20 +28,10 @@ public class SecurityConfig {
     };
     @Qualifier("customUserDetailsService")
     private final UserDetailsService userDetailsService;
-
-    private final CustomAuthenticationFilter filter;
-
     private final JwtAuthFilter jwtAuthFilter;
-
-    public SecurityConfig(UserDetailsService userDetailsService, CustomAuthenticationFilter filter, JwtAuthFilter jwtAuthFilter) {
-        this.userDetailsService = userDetailsService;
-        this.filter = filter;
-        this.jwtAuthFilter = jwtAuthFilter;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        filter.setFilterProcessesUrl("/api/login");
 
         http.csrf().disable();
         http.sessionManagement()
@@ -50,7 +40,6 @@ public class SecurityConfig {
                         .requestMatchers(ENDPOINT_WHITELIST).permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated());
-        http.addFilter(filter);
         http.authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -60,11 +49,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
     }
 
     @Bean
