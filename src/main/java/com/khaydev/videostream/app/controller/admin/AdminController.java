@@ -32,9 +32,4 @@ public class AdminController {
 
         return new ResponseEntity<>("Admin Role added successfully",HttpStatus.CREATED);
     }
-
-    @GetMapping("/")
-    public ResponseEntity<String> test(){
-        return ResponseEntity.ok("Admin Role added successfully");
-    }
 }
