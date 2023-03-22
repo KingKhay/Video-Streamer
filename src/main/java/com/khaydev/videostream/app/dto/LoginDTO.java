@@ -1,6 +1,7 @@
 package com.khaydev.videostream.app.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LoginDTO {
 
-    @NotBlank
+    @NotNull
     private String username;
 
-    @NotBlank
+    @NotNull
     private String password;
 }

@@ -46,7 +46,9 @@ public class User {
     @NotBlank
     private String lastName;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
+                            CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.LAZY)
+
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

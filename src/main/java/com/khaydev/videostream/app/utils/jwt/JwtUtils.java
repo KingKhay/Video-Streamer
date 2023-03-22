@@ -38,6 +38,18 @@ public class JwtUtils {
         DecodedJWT theJwt = verifier.verify(jwt);
         return theJwt.getClaim("roles").asList(String.class);
     }
+
+    public Date getExpirationDateFromToken(String token){
+        Algorithm algorithm = Algorithm.HMAC256(SECRET.getBytes());
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT theJwt = verifier.verify(token);
+
+        return theJwt.getExpiresAt();
+    }
+    public Boolean isTokenExpired(String token){
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
 }
 
 

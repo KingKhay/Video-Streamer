@@ -1,16 +1,13 @@
 package com.khaydev.videostream.app.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class RegisterResponse {
+public class RoleDTO {
 
-    private String username;
-    private String message;
+    private String name;
 }
