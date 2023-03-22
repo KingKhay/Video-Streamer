@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
@@ -17,9 +19,22 @@ public class AdminController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/")
+    @PostMapping("/role")
     public ResponseEntity<String> createRole(@RequestBody RoleDTO role){
         service.createRole(role);
         return ResponseEntity.ok("Role created");
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public ResponseEntity<String> addAdmin(@PathVariable UUID id){
+        service.addAdmin(id);
+
+        return new ResponseEntity<>("Admin Role added successfully",HttpStatus.CREATED);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<String> test(){
+        return ResponseEntity.ok("Admin Role added successfully");
     }
 }

@@ -5,6 +5,7 @@ import com.khaydev.videostream.app.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -26,11 +27,16 @@ public class SecurityConfig {
     public static final String[] ENDPOINT_WHITELIST = {
             "/api/auth/login",
             "/api/auth/register",
-            "/api/admin/",
-            "/api/admin/**",
-            "/api/users/"
+            "/api/admin/**"
     };
 
+    public static final String[] USERS_WHITELIST = {
+            "/api/users/**"
+    };
+
+    public static final String[] ADMIN_WHITELIST = {
+            "api/admin/**"
+    };
     private final UserDetailsService userDetailsService;
     private final JwtAuthFilter filter;
 
@@ -47,6 +53,10 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
                 .requestMatchers(ENDPOINT_WHITELIST)
                 .permitAll()
+                .requestMatchers(HttpMethod.GET,USERS_WHITELIST)
+                .hasRole("USER")
+                .requestMatchers(ADMIN_WHITELIST)
+                .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
