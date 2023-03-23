@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.io.IOException;
 
@@ -20,7 +22,7 @@ public class RegistrationSuccessListener {
     private String emailFrom;
 
     private final EmailService emailService;
-    @EventListener
+    @TransactionalEventListener(phase= TransactionPhase.AFTER_COMMIT)
     @Async
     public void onRegistrationSuccess(RegistrationSuccessEvent registrationSuccessEvent) throws MessagingException, IOException {
 
