@@ -5,11 +5,14 @@ import com.khaydev.videostream.app.dto.LoginResponse;
 import com.khaydev.videostream.app.dto.RegisterResponse;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.service.auth.AuthService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,7 +23,7 @@ public class AuthenticationController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> registerUser(@Valid @RequestBody User user){
+    public ResponseEntity<RegisterResponse> registerUser(@Valid @RequestBody User user) throws MessagingException, IOException {
         return new ResponseEntity<>(service.register(user), HttpStatus.CREATED);
     }
 
