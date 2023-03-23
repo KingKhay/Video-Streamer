@@ -4,6 +4,7 @@ package com.khaydev.videostream.app.service.auth;
 import com.khaydev.videostream.app.dto.LoginDTO;
 import com.khaydev.videostream.app.dto.LoginResponse;
 import com.khaydev.videostream.app.dto.RegisterResponse;
+import com.khaydev.videostream.app.event.RegistrationSuccessEvent;
 import com.khaydev.videostream.app.model.Email;
 import com.khaydev.videostream.app.model.Role;
 import com.khaydev.videostream.app.model.User;
@@ -15,6 +16,7 @@ import com.khaydev.videostream.app.utils.jwt.JwtUtils;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,10 +31,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class IAuthService implements AuthService{
-
-    @Value("${mail.from}")
-    private String emailFrom;
-
     private final UserRepository repository;
 
     private final RoleRepository roleRepository;
@@ -45,7 +43,8 @@ public class IAuthService implements AuthService{
 
     private final AuthenticationManager authenticationManager;
 
-    private final EmailService emailService;
+    private final ApplicationEventPublisher publisher;
+
 
     @Override
     public RegisterResponse register(User user) throws MessagingException, IOException {
@@ -55,13 +54,7 @@ public class IAuthService implements AuthService{
 
         repository.save(user);
 
-        Email email = Email.builder()
-                .from(emailFrom)
-                .to(user.getEmail())
-                .subject("Welcome to VideoStreamer")
-                .build();
-
-        emailService.sendHtmlMail(email);
+        publisher.publishEvent(new RegistrationSuccessEvent(user));
 
         return RegisterResponse.builder()
                 .username(user.getUsername())

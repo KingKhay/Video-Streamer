@@ -8,5 +8,5 @@ import java.io.IOException;
 
 public interface EmailService {
 
-    void sendHtmlMail(Email email) throws MessagingException, IOException;
+    void sendHtmlMail(Email email, String username) throws MessagingException, IOException;
 }

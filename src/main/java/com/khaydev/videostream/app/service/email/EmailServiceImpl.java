@@ -19,7 +19,7 @@ public class EmailServiceImpl implements  EmailService{
     private final JavaMailSender emailSender;
 
     @Override
-    public void sendHtmlMail(Email email) throws MessagingException, IOException {
+    public void sendHtmlMail(Email email,String username) throws MessagingException, IOException {
         MimeMessage message = emailSender.createMimeMessage();
 
         message.setFrom(email.getFrom());
@@ -30,7 +30,7 @@ public class EmailServiceImpl implements  EmailService{
 
         String htmlTemplate = new String(Files.readAllBytes(htmlFile.toPath()));
 
-        htmlTemplate = htmlTemplate.replace("${name}", "John Doe");
+        htmlTemplate = htmlTemplate.replace("${name}", username);
 
         message.setContent(htmlTemplate, "text/html; charset=UTF-8");
 
