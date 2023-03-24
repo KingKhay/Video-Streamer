@@ -1,12 +1,15 @@
 package com.khaydev.videostream.app.controller.admin;
 
 import com.khaydev.videostream.app.dto.RoleDTO;
+import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.model.Role;
+import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.service.admin.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,5 +34,12 @@ public class AdminController {
         service.addAdmin(id);
 
         return new ResponseEntity<>("Admin Role added successfully",HttpStatus.CREATED);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/")
+    public ResponseEntity<List<User>> findAllUsers(){
+        List<User> users = service.findAllUsers();
+        return ResponseEntity.ok(users);
     }
 }

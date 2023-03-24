@@ -9,12 +9,13 @@ import com.khaydev.videostream.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class IAdminService implements AdminService{
+public class IAdminService implements AdminService {
 
     private final RoleRepository repository;
 
@@ -31,11 +32,19 @@ public class IAdminService implements AdminService{
 
     @Override
     public void addAdmin(UUID id) {
-       User user = userRepository.findById(id)
-               .orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
         Role roleByName = repository.findRoleByName(ADMIN_ROLE);
 
         user.getRoles().add(roleByName);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        //Refactor to add Pagination
+        List<User> users = userRepository.findAll();
+
+        return users;
     }
 }

@@ -28,13 +28,6 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/")
-    public ResponseEntity<List<UserDTO>> findAllUsers(){
-        List<UserDTO> users = service.findAllUsers();
-        return ResponseEntity.ok(users);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO user, @PathVariable UUID id){
         return ResponseEntity.ok(service.updateUser(user, id));
@@ -52,8 +45,8 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UserDTO> findUserByUsername(@PathVariable String username){
-        return ResponseEntity.ok(service.findUserByUsername(username));
+    @GetMapping("/search/{username}")
+    public ResponseEntity<List<UserDTO>> searchUserByUsername(@PathVariable String username){
+        return ResponseEntity.ok(service.searchUsersByUsername(username));
     }
 }

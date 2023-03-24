@@ -29,14 +29,6 @@ public class IUserService implements  UserService{
     }
 
     @Override
-    public List<UserDTO> findAllUsers() {
-        return repository.findAll()
-                .stream()
-                .map(objectMapper::convertUserToUserDTO)
-                .toList();
-    }
-
-    @Override
     public UserDTO updateUser(UserDTO userDetails, UUID id) {
         User user = repository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
@@ -71,10 +63,13 @@ public class IUserService implements  UserService{
                 .toList();
     }
 
-    public UserDTO findUserByUsername(String username){
-        User user = repository.findUserByUsername(username)
-                .orElseThrow(UserNotFoundException::new);
+    public List<UserDTO> searchUsersByUsername(String username){
 
-        return objectMapper.convertUserToUserDTO(user);
+        List<User> users = repository.findUsersByUsernameLikeIgnoreCase(username);
+        List<UserDTO> userDTOS = users.stream()
+                .map(objectMapper::convertUserToUserDTO)
+                .toList();
+
+        return userDTOS;
     }
 }

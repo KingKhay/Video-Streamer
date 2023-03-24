@@ -27,15 +27,20 @@ public class SecurityConfig {
     public static final String[] ENDPOINT_WHITELIST = {
             "/api/auth/login",
             "/api/auth/register",
-            "/api/admin/**"
     };
 
-    public static final String[] USERS_WHITELIST = {
-            "/api/users/**"
+    public static final String[] GET_METHOD_USERS_WHITELIST = {
+            "/api/users/search/**",
+            "/api/users/*/videos",
+    };
+
+    public static final String[] PUT_METHOD_USERS_WHITELIST = {
+            "/api/users/*"
     };
 
     public static final String[] ADMIN_WHITELIST = {
-            "api/admin/**"
+            "/api/admin/**",
+
     };
     private final UserDetailsService userDetailsService;
     private final JwtAuthFilter filter;
@@ -53,7 +58,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
                 .requestMatchers(ENDPOINT_WHITELIST)
                 .permitAll()
-                .requestMatchers(HttpMethod.GET,USERS_WHITELIST)
+                .requestMatchers(HttpMethod.GET, GET_METHOD_USERS_WHITELIST)
+                .hasRole("USER")
+                .requestMatchers(HttpMethod.PUT, PUT_METHOD_USERS_WHITELIST)
                 .hasRole("USER")
                 .requestMatchers(ADMIN_WHITELIST)
                 .hasRole("ADMIN")
