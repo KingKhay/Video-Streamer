@@ -10,10 +10,7 @@ public interface UserService {
 
     UserDTO findUserById(UUID id);
 
-
     UserDTO updateUser(UserDTO user, UUID id);
-
-    UserDTO deleteUser(UUID id);
 
     List<VideoDTO> findVideos(UUID id);
 

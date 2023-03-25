@@ -37,9 +37,15 @@ public class AdminController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/")
+    @GetMapping("/users")
     public ResponseEntity<List<User>> findAllUsers(){
         List<User> users = service.findAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable UUID id){
+        return ResponseEntity.ok(service.deleteUser(id));
     }
 }

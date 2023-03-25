@@ -1,6 +1,7 @@
 package com.khaydev.videostream.app.service.admin;
 
 import com.khaydev.videostream.app.dto.RoleDTO;
+import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.Role;
 import com.khaydev.videostream.app.model.User;
@@ -46,5 +47,14 @@ public class IAdminService implements AdminService {
         List<User> users = userRepository.findAll();
 
         return users;
+    }
+
+    @Override
+    public User deleteUser(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        repository.deleteById(id);
+        return user;
     }
 }

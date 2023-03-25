@@ -43,14 +43,7 @@ public class IUserService implements  UserService{
         return userDetails;
     }
 
-    @Override
-    public UserDTO deleteUser(UUID id) {
-        User user = repository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
 
-        repository.deleteById(id);
-        return objectMapper.convertUserToUserDTO(user);
-    }
 
     @Override
     public List<VideoDTO> findVideos(UUID id) {

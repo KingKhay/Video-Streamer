@@ -1,6 +1,7 @@
 package com.khaydev.videostream.app.service.admin;
 
 import com.khaydev.videostream.app.dto.RoleDTO;
+import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.model.Role;
 import com.khaydev.videostream.app.model.User;
 
@@ -14,4 +15,6 @@ public interface AdminService {
     void addAdmin(UUID id);
 
     List<User> findAllUsers();
+
+    User deleteUser(UUID id);
 }

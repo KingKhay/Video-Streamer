@@ -34,11 +34,6 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<UserDTO> deleteUser(@PathVariable UUID id){
-        return ResponseEntity.ok(service.deleteUser(id));
-    }
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/videos")
     public ResponseEntity<List<VideoDTO>> getAllVideos(@PathVariable UUID id){
         return ResponseEntity.ok(service.findVideos(id));
