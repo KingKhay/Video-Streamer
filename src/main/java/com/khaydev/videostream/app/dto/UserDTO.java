@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 
 @Getter
@@ -17,6 +18,9 @@ import java.time.LocalDate;
 public class UserDTO {
 
     @NotBlank
+    private UUID id;
+
+    @NotBlank
     private String username;
 
     @NotBlank
@@ -24,9 +28,4 @@ public class UserDTO {
 
     @NotBlank
     private String lastName;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dob;
-
-
 }

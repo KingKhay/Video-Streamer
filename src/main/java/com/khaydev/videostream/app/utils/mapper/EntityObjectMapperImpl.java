@@ -13,8 +13,8 @@ public class EntityObjectMapperImpl implements EntityObjectMapper{
     @Override
     public UserDTO convertUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
-        userDTO.setDob(user.getDob());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
 
