@@ -24,24 +24,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    public static final String[] ENDPOINT_WHITELIST = {
-            "/api/auth/login",
-            "/api/auth/register",
-    };
-
-    public static final String[] GET_METHOD_USERS_WHITELIST = {
-            "/api/users/search/**",
-            "/api/users/*/videos",
-    };
-
-    public static final String[] PUT_METHOD_USERS_WHITELIST = {
-            "/api/users/*"
-    };
-
-    public static final String[] ADMIN_WHITELIST = {
-            "/api/admin/**",
-
-    };
     private final UserDetailsService userDetailsService;
     private final JwtAuthFilter filter;
 
@@ -56,13 +38,13 @@ public class SecurityConfig {
         http.sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests()
-                .requestMatchers(ENDPOINT_WHITELIST)
+                .requestMatchers(EndpointConfig.ENDPOINT_WHITELIST)
                 .permitAll()
-                .requestMatchers(HttpMethod.GET, GET_METHOD_USERS_WHITELIST)
+                .requestMatchers(HttpMethod.GET, EndpointConfig.GET_METHOD_USERS_WHITELIST)
                 .hasAnyRole("USER", "ADMIN")
-                .requestMatchers(HttpMethod.PUT, PUT_METHOD_USERS_WHITELIST)
+                .requestMatchers(HttpMethod.PUT, EndpointConfig.PUT_METHOD_USERS_WHITELIST)
                 .hasAnyRole("USER","ADMIN")
-                .requestMatchers(ADMIN_WHITELIST)
+                .requestMatchers(EndpointConfig.ADMIN_WHITELIST)
                 .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
