@@ -36,7 +36,6 @@ public class IUserService implements  UserService{
         user.setUsername(userDetails.getUsername());
         user.setFirstName(userDetails.getFirstName());
         user.setLastName(userDetails.getLastName());
-        user.setDob(userDetails.getDob());
 
         repository.save(user);
 
