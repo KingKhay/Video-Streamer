@@ -21,11 +21,6 @@ public class ICommentService implements CommentService{
     }
 
     @Override
-    public void deleteComment(UUID id) {
-        commentRepository.deleteById(id);
-    }
-
-    @Override
     public List<CommentDTO> findCommentByVideo(UUID id) {
         return commentRepository.findCommentsByVideoId(id)
                 .stream()
