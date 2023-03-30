@@ -5,6 +5,7 @@ public class EndpointConfig {
     public static final String[] ENDPOINT_WHITELIST = {
             "/api/auth/login",
             "/api/auth/register",
+            "/api/v2/api-docs"
     };
 
     public static final String[] GET_METHOD_USERS_WHITELIST = {
