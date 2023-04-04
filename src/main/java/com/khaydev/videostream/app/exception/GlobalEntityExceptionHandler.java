@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -39,7 +38,7 @@ public class GlobalEntityExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler({DataIntegrityViolationException.class})
     protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
         UserError error = new UserError();
-        error.setMessage("Username or Email Already Exists");
+        error.setMessage(ex.getMessage());
         error.setStatus(HttpStatus.CONFLICT.toString());
 
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
