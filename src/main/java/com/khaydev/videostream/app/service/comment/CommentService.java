@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CommentService {
-    List<CommentDTO> findCommentByVideo(UUID id);
+    List<CommentDTO> findCommentsByVideo(UUID id);
 }

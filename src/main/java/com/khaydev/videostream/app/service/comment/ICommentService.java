@@ -21,7 +21,7 @@ public class ICommentService implements CommentService{
     }
 
     @Override
-    public List<CommentDTO> findCommentByVideo(UUID id) {
+    public List<CommentDTO> findCommentsByVideo(UUID id) {
         return commentRepository.findCommentsByVideoId(id)
                 .stream()
                 .map(objectMapper::convertCommentToCommentDTO)
