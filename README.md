@@ -8,3 +8,5 @@
 ### Swagger UI
 #### To List All Endpoints
 http://localhost:8085/swagger-ui/index.html
+
+Videos are stored in an AWS S3 bucket.
