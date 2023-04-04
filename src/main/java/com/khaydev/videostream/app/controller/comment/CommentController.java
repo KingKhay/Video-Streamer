@@ -23,7 +23,7 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public ResponseEntity<List<CommentDTO>> findCommentsByVideo(@PathVariable UUID id){
-        List<CommentDTO> comments = service.findCommentByVideo(id);
+        List<CommentDTO> comments = service.findCommentsByVideo(id);
         return ResponseEntity.ok(comments);
     }
 }
