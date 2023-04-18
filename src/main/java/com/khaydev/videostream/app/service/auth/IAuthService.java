@@ -21,7 +21,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -34,8 +33,6 @@ public class IAuthService implements AuthService{
 
     private final PasswordEncoder encoder;
 
-    private final String roleUser = "ROLE_USER";
-
     private final JwtUtils jwtUtils;
 
     private final AuthenticationManager authenticationManager;
@@ -44,7 +41,8 @@ public class IAuthService implements AuthService{
 
 
     @Override
-    public RegisterResponse register(User user) throws MessagingException, IOException {
+    public RegisterResponse register(User user) {
+        String roleUser = "ROLE_USER";
         Role userRole = roleRepository.getRoleByName(roleUser);
         user.getRoles().add(userRole);
         user.setPassword(encoder.encode(user.getPassword()));
