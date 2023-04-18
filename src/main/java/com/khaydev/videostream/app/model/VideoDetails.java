@@ -2,6 +2,8 @@ package com.khaydev.videostream.app.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -32,9 +34,11 @@ public class VideoDetails {
     private String resourceUrl;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @PastOrPresent
     private LocalDate dateUploaded;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @FutureOrPresent
     private LocalDate dateUpdated;
 
     @ManyToOne(cascade = {
