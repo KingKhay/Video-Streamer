@@ -11,7 +11,6 @@ import com.khaydev.videostream.app.repository.RoleRepository;
 import com.khaydev.videostream.app.repository.UserRepository;
 import com.khaydev.videostream.app.service.CustomUserDetails;
 import com.khaydev.videostream.app.utils.jwt.JwtUtils;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;

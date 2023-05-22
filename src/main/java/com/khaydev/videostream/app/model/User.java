@@ -45,8 +45,8 @@ public class User {
     @NotBlank
     private String lastName;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
-                            CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+            CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.LAZY)
 
     @JoinTable(
             name = "users_roles",
@@ -65,34 +65,17 @@ public class User {
 
     private String imageUrl;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Past
-    private LocalDate dateUploaded;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Future
-    private LocalDate dateUpdated;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<VideoDetails> videosUploaded;
 
 
-    public void addVideo(VideoDetails video){
+    public void addVideo(VideoDetails video) {
         if (videosUploaded == null) {
             videosUploaded = new ArrayList<>();
         }
 
         videosUploaded.add(video);
         video.setUser(this);
-    }
-
-    @PrePersist
-    protected void onUpload(){
-        this.dateUploaded = LocalDate.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate(){
-        this.dateUpdated = LocalDate.now();
     }
 }

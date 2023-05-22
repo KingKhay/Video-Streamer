@@ -1,5 +1,6 @@
 package com.khaydev.videostream.app.exception;
 
+import com.khaydev.videostream.app.exception.user.UserAlreadyExistException;
 import com.khaydev.videostream.app.exception.user.UserError;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.exception.video.VideoError;
@@ -45,12 +46,11 @@ public class GlobalEntityExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex){
+    protected ResponseEntity<Object> handleUserAlreadyExistException(UserAlreadyExistException ex){
         UserError error = new UserError();
-        error.setMessage(ex.getFieldError().getDefaultMessage());
-        error.setStatus(HttpStatus.BAD_REQUEST.toString());
+        error.setMessage(ex.getMessage());
+        error.setStatus(HttpStatus.CONFLICT.toString());
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 }

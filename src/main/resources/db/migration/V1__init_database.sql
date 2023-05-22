@@ -16,8 +16,6 @@ create table user (
                       last_name varchar(255),
                       password varchar(255) not null,
                       username varchar(255) not null,
-                      date_updated date,
-                      date_uploaded date,
                       primary key (id)
 );
 
