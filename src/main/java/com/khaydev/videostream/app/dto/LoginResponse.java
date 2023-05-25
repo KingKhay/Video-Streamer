@@ -11,4 +11,5 @@ public class LoginResponse {
 
     private String username;
     private String jwt;
+    private String message;
 }
