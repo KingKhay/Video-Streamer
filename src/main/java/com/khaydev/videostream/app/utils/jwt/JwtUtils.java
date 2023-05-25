@@ -16,12 +16,12 @@ public class JwtUtils {
     @Value("${jwt.secret}")
     private String SECRET;
 
-    public String createJwt(String username, List<String> roles){
+    public String createJwt(String username, List<String> roles, Date expiryDate){
         Algorithm algorithm = Algorithm.HMAC256(SECRET.getBytes());
         return JWT.create()
                 .withSubject(username)
                 .withIssuedAt(new Date(System.currentTimeMillis()))
-                .withExpiresAt(new Date(System.currentTimeMillis() * 10 * 60 * 1000))
+                .withExpiresAt(expiryDate)
                 .withClaim("username",username)
                 .withClaim("roles",roles)
                 .sign(algorithm);
