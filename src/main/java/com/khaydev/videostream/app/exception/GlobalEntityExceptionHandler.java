@@ -10,7 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -46,11 +46,21 @@ public class GlobalEntityExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler({UserAlreadyExistException.class})
     protected ResponseEntity<Object> handleUserAlreadyExistException(UserAlreadyExistException ex){
         UserError error = new UserError();
         error.setMessage(ex.getMessage());
         error.setStatus(HttpStatus.CONFLICT.toString());
 
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    protected ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
+        UserError error = new UserError();
+        error.setMessage(ex.getMessage());
+        error.setStatus(HttpStatus.UNAUTHORIZED.toString());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 }
