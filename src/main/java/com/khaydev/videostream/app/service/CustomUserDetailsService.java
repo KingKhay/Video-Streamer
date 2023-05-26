@@ -1,6 +1,5 @@
 package com.khaydev.videostream.app.service;
 
-import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

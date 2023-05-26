@@ -3,7 +3,9 @@ package com.khaydev.videostream.app.service.user;
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
+import com.khaydev.videostream.app.model.PasswordResetToken;
 import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.repository.PasswordTokenRepository;
 import com.khaydev.videostream.app.repository.UserRepository;
 import com.khaydev.videostream.app.utils.mapper.EntityObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class IUserService implements  UserService{
     private final UserRepository repository;
     private final EntityObjectMapper objectMapper;
+    private final PasswordTokenRepository passwordTokenRepository;
 
 
 
@@ -64,5 +67,11 @@ public class IUserService implements  UserService{
                 .toList();
 
         return userDTOS;
+    }
+
+    @Override
+    public void createPasswordResetTokenForUser(User user, String token) {
+        PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordTokenRepository.save(myToken);
     }
 }
