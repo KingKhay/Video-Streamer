@@ -1,10 +1,14 @@
 package com.khaydev.videostream.app.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;
