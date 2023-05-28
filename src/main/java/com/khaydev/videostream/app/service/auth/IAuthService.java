@@ -3,14 +3,17 @@ package com.khaydev.videostream.app.service.auth;
 
 import com.khaydev.videostream.app.dto.LoginDTO;
 import com.khaydev.videostream.app.dto.LoginResponse;
+import com.khaydev.videostream.app.dto.PasswordResetEmailRequest;
 import com.khaydev.videostream.app.dto.RegisterResponse;
 import com.khaydev.videostream.app.event.RegistrationSuccessEvent;
 import com.khaydev.videostream.app.exception.user.UserAlreadyExistException;
+import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.Role;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.repository.RoleRepository;
 import com.khaydev.videostream.app.repository.UserRepository;
 import com.khaydev.videostream.app.service.CustomUserDetails;
+import com.khaydev.videostream.app.service.passwordreset.PasswordResetService;
 import com.khaydev.videostream.app.utils.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -41,6 +45,8 @@ public class IAuthService implements AuthService{
     private final AuthenticationManager authenticationManager;
 
     private final ApplicationEventPublisher publisher;
+
+    private final PasswordResetService passwordResetService;
 
 
     @Override
@@ -83,5 +89,17 @@ public class IAuthService implements AuthService{
         }catch(Exception ex){
             throw new BadCredentialsException("Invalid username or password");
         }
+    }
+
+    @Override
+    public String resetPassword(PasswordResetEmailRequest passwordResetEmail) {
+        User user = repository.findUserByEmail(passwordResetEmail.email())
+                .orElseThrow(UserNotFoundException::new);
+
+        String token = UUID.randomUUID().toString();
+
+        passwordResetService.createResetPasswordToken(user, token);
+        //Logic to send the token to the email provided
+        return null;
     }
 }

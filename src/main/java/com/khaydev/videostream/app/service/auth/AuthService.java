@@ -2,6 +2,7 @@ package com.khaydev.videostream.app.service.auth;
 
 import com.khaydev.videostream.app.dto.LoginDTO;
 import com.khaydev.videostream.app.dto.LoginResponse;
+import com.khaydev.videostream.app.dto.PasswordResetEmailRequest;
 import com.khaydev.videostream.app.dto.RegisterResponse;
 import com.khaydev.videostream.app.model.User;
 import jakarta.mail.MessagingException;
@@ -14,4 +15,6 @@ public interface AuthService {
 
 
     LoginResponse login(LoginDTO loginDTO);
+
+    String resetPassword(PasswordResetEmailRequest passwordResetEmail);
 }
