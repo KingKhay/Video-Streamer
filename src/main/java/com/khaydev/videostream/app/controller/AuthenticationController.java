@@ -2,7 +2,6 @@ package com.khaydev.videostream.app.controller;
 
 import com.khaydev.videostream.app.dto.LoginDTO;
 import com.khaydev.videostream.app.dto.LoginResponse;
-import com.khaydev.videostream.app.dto.PasswordResetEmailRequest;
 import com.khaydev.videostream.app.dto.RegisterResponse;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.service.auth.AuthService;
@@ -33,9 +32,5 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDTO loginDTO){
         return ResponseEntity.ok(service.login(loginDTO));
-    }
-
-    public ResponseEntity<String> resetPassword(@RequestBody PasswordResetEmailRequest passwordResetEmail){
-        return null;
     }
 }

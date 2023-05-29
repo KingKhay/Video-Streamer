@@ -16,5 +16,5 @@ public interface AuthService {
 
     LoginResponse login(LoginDTO loginDTO);
 
-    String resetPassword(PasswordResetEmailRequest passwordResetEmail);
+    String resetPassword(PasswordResetEmailRequest passwordResetEmail) throws MessagingException, IOException;
 }
