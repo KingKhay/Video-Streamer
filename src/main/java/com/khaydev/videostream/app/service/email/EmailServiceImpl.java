@@ -4,6 +4,7 @@ import com.khaydev.videostream.app.model.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.apache.bcel.util.ClassPath;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,24 @@ public class EmailServiceImpl implements  EmailService{
         String htmlTemplate = new String(Files.readAllBytes(htmlFile.toPath()));
 
         htmlTemplate = htmlTemplate.replace("${name}", username);
+
+        message.setContent(htmlTemplate, "text/html; charset=UTF-8");
+
+        emailSender.send(message);
+    }
+
+    @Override
+    public void sendPasswordResetMail(Email email, String token) throws MessagingException, IOException {
+        MimeMessage message;
+        message = emailSender.createMimeMessage();
+
+        message.setFrom(email.getFrom());
+        message.setRecipients(MimeMessage.RecipientType.TO, email.getTo());
+        message.setSubject(email.getSubject());
+
+        File htmlFile = new ClassPathResource("data/mail.html").getFile();
+        String htmlTemplate = new String(Files.readAllBytes(htmlFile.toPath()));
+        htmlTemplate = htmlTemplate.replace("${token}", token);
 
         message.setContent(htmlTemplate, "text/html; charset=UTF-8");
 
