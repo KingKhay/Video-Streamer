@@ -44,6 +44,14 @@ CREATE TABLE `users_roles` (
                                CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 );
 
+CREATE TABLE `password_reset_token` (
+                                      `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                      `token` VARCHAR(255),
+                                      `user_id` BINARY(16) NOT NULL,
+                                      `expiry_date` TIMESTAMP,
+                                      FOREIGN KEY (`user_id`) REFERENCES user (`id`)
+);
+
 alter table user
     add constraint UKf9dvvibvpfsldnu8wh3enop4i unique (username, email);
 
