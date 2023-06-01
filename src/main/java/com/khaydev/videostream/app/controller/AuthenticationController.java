@@ -1,8 +1,6 @@
 package com.khaydev.videostream.app.controller;
 
-import com.khaydev.videostream.app.dto.LoginDTO;
-import com.khaydev.videostream.app.dto.LoginResponse;
-import com.khaydev.videostream.app.dto.RegisterResponse;
+import com.khaydev.videostream.app.dto.*;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.service.auth.AuthService;
 import jakarta.mail.MessagingException;
@@ -32,5 +30,16 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDTO loginDTO){
         return ResponseEntity.ok(service.login(loginDTO));
+    }
+
+    @PostMapping("/user/reset-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody PasswordResetEmailRequest passwordResetEmailRequest) throws MessagingException, IOException {
+        return ResponseEntity.ok(service.resetPassword(passwordResetEmailRequest));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/user/savePassword")
+    public ResponseEntity<String> saveResetPassword(@Valid @RequestBody PasswordDto passwordDto){
+        return ResponseEntity.ok(service.saveResetPassword(passwordDto));
     }
 }
