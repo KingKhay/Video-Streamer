@@ -63,4 +63,22 @@ public class GlobalEntityExceptionHandler extends ResponseEntityExceptionHandler
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
+
+    @ExceptionHandler(PasswordResetTokenNotFoundException.class)
+    protected ResponseEntity<Object> handlePasswordResetTokenNotFoundException(PasswordResetTokenNotFoundException ex) {
+        UserError error = new UserError();
+        error.setMessage(ex.getMessage());
+        error.setStatus(HttpStatus.NOT_FOUND.toString());
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PasswordResetTokenNotValid.class)
+    protected ResponseEntity<Object> handlePasswordResetTokenNotValidException(PasswordResetTokenNotValid ex) {
+        UserError error = new UserError();
+        error.setMessage(ex.getMessage());
+        error.setStatus(HttpStatus.UNAUTHORIZED.toString());
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
 }
