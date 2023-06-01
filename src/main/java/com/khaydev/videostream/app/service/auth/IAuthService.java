@@ -1,16 +1,17 @@
 package com.khaydev.videostream.app.service.auth;
 
 
-import com.khaydev.videostream.app.dto.LoginDTO;
-import com.khaydev.videostream.app.dto.LoginResponse;
-import com.khaydev.videostream.app.dto.PasswordResetEmailRequest;
-import com.khaydev.videostream.app.dto.RegisterResponse;
+import com.khaydev.videostream.app.dto.*;
 import com.khaydev.videostream.app.event.RegistrationSuccessEvent;
+import com.khaydev.videostream.app.exception.PasswordResetTokenNotFoundException;
+import com.khaydev.videostream.app.exception.PasswordResetTokenNotValid;
 import com.khaydev.videostream.app.exception.user.UserAlreadyExistException;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.Email;
+import com.khaydev.videostream.app.model.PasswordResetToken;
 import com.khaydev.videostream.app.model.Role;
 import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.repository.PasswordTokenRepository;
 import com.khaydev.videostream.app.repository.RoleRepository;
 import com.khaydev.videostream.app.repository.UserRepository;
 import com.khaydev.videostream.app.service.CustomUserDetails;
@@ -30,15 +31,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
 @RequiredArgsConstructor
-public class IAuthService implements AuthService{
+public class IAuthService implements AuthService {
 
     @Value("${mail.from}")
     private String emailFrom;
@@ -58,12 +56,13 @@ public class IAuthService implements AuthService{
     private final PasswordResetService passwordResetService;
 
     private final EmailService emailService;
+    private final PasswordTokenRepository passwordTokenRepository;
 
 
     @Override
     public RegisterResponse register(User user) {
         Optional<User> existingUser = this.repository.findUserByUsername(user.getUsername());
-        if(existingUser.isPresent()){
+        if (existingUser.isPresent()) {
             throw new UserAlreadyExistException("username already exists");
         }
         String roleUser = "ROLE_USER";
@@ -83,7 +82,7 @@ public class IAuthService implements AuthService{
 
     @Override
     public LoginResponse login(LoginDTO loginDTO) {
-        try{
+        try {
             Authentication authenticate = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(
                             loginDTO.getUsername(),
@@ -96,8 +95,8 @@ public class IAuthService implements AuthService{
                     .toList();
             String token = jwtUtils.createJwt(userDetails.getUsername(), roles, new Date(System.currentTimeMillis() * 10 * 60 * 1000));
 
-            return new LoginResponse(userDetails.getUsername(),token, "login successful");
-        }catch(Exception ex){
+            return new LoginResponse(userDetails.getUsername(), token, "login successful");
+        } catch (Exception ex) {
             throw new BadCredentialsException("Invalid username or password");
         }
     }
@@ -109,7 +108,7 @@ public class IAuthService implements AuthService{
 
         String token = UUID.randomUUID().toString();
 
-        //Creates a token and adds it to the database alongside a user
+        //Saves a token and adds it to the database alongside a user
         passwordResetService.createResetPasswordToken(user, token);
 
         //Logic to send the token to the email provided
@@ -122,4 +121,24 @@ public class IAuthService implements AuthService{
 
         return "password reset mail sent successfully";
     }
+
+    @Override
+    public String saveResetPassword(PasswordDto passwordDto) {
+        PasswordResetToken passwordResetToken = passwordTokenRepository.findPasswordResetTokenByToken(passwordDto.token())
+                .orElseThrow(() -> new PasswordResetTokenNotFoundException("could not find token"));
+        boolean isTokenValid = isTokenValid(passwordResetToken);
+        if (isTokenValid) {
+            User user = passwordResetToken.getUser();
+            user.setPassword(encoder.encode(passwordDto.newPassword()));
+            repository.save(user);
+            return "password reset successfully";
+        }
+        throw new PasswordResetTokenNotValid("invalid password reset token");
+    }
+
+    private boolean isTokenValid(PasswordResetToken passwordResetToken) {
+        final Calendar cal = Calendar.getInstance();
+        return cal.getTime().before(passwordResetToken.getExpiryDate());
+    }
+
 }
