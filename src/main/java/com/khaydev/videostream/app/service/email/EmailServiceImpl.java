@@ -46,7 +46,7 @@ public class EmailServiceImpl implements  EmailService{
         message.setRecipients(MimeMessage.RecipientType.TO, email.getTo());
         message.setSubject(email.getSubject());
 
-        File htmlFile = new ClassPathResource("data/mail.html").getFile();
+        File htmlFile = new ClassPathResource("data/password_reset.html").getFile();
         String htmlTemplate = new String(Files.readAllBytes(htmlFile.toPath()));
         htmlTemplate = htmlTemplate.replace("${token}", token);
 
