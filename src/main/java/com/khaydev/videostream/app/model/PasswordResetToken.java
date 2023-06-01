@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -11,18 +12,8 @@ import java.util.Date;
 @Setter
 public class PasswordResetToken {
 
-    private static final int EXPIRATION = 60 * 24;
-
-    public PasswordResetToken() {
-
-    }
-    public PasswordResetToken(String token, User user) {
-        this.token = token;
-        this.user = user;
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String token;
@@ -32,5 +23,19 @@ public class PasswordResetToken {
     private User user;
 
     private Date expiryDate;
+    public PasswordResetToken() {
+    }
+    public PasswordResetToken(String token, User user) {
+        this.token = token;
+        this.user = user;
+    }
+
+    @PrePersist
+    void beforeCreation(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, 12);
+
+        this.expiryDate = calendar.getTime();
+    }
 
 }
