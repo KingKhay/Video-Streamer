@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,25 +22,19 @@ public class EmailServiceImpl implements  EmailService{
 
     @Override
     public void sendHtmlMail(Email email,String username) throws MessagingException, IOException {
-        MimeMessage message = emailSender.createMimeMessage();
-
-        message.setFrom(email.getFrom());
-        message.setRecipients(MimeMessage.RecipientType.TO, email.getTo());
-        message.setSubject(email.getSubject());
-
-        File htmlFile = new ClassPathResource("data/mail.html").getFile();
-
-        String htmlTemplate = new String(Files.readAllBytes(htmlFile.toPath()));
-
-        htmlTemplate = htmlTemplate.replace("${name}", username);
-
-        message.setContent(htmlTemplate, "text/html; charset=UTF-8");
-
-        emailSender.send(message);
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("${name}", username);
+        sendHTMLMail(email, "data/user_registration.html", placeholders);
     }
 
     @Override
     public void sendPasswordResetMail(Email email, String token) throws MessagingException, IOException {
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("${token}", token);
+        sendHTMLMail(email, "data/password_reset.html", placeholders);
+    }
+
+    public void sendHTMLMail(Email email, String templateFile, Map<String, String> placeholders) throws MessagingException, IOException {
         MimeMessage message;
         message = emailSender.createMimeMessage();
 
@@ -48,7 +44,12 @@ public class EmailServiceImpl implements  EmailService{
 
         File htmlFile = new ClassPathResource("data/password_reset.html").getFile();
         String htmlTemplate = new String(Files.readAllBytes(htmlFile.toPath()));
-        htmlTemplate = htmlTemplate.replace("${token}", token);
+
+        for(Map.Entry<String, String> placeholder : placeholders.entrySet()){
+            String placeholderKey = placeholder.getKey();
+            String placeholderValue = placeholder.getValue();
+            htmlTemplate = htmlTemplate.replace(placeholderKey, placeholderValue);
+        }
 
         message.setContent(htmlTemplate, "text/html; charset=UTF-8");
 
