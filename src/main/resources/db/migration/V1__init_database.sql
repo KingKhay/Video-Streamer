@@ -1,69 +1,57 @@
-create table comment (
-                         id binary(16) not null,
+CREATE TABLE comment (
+                         id uuid NOT NULL,
                          comment_date date,
                          message varchar(255),
                          username varchar(255),
-                         video_id binary(16) not null,
-                         primary key (id)
+                         video_id uuid NOT NULL,
+                         PRIMARY KEY (id)
 );
 
-create table user (
-                      id binary(16) not null,
-                      dob date,
-                      email varchar(255) not null,
-                      first_name varchar(255),
-                      image_url varchar(255),
-                      last_name varchar(255),
-                      password varchar(255) not null,
-                      username varchar(255) not null,
-                      primary key (id)
+CREATE TABLE "user" (
+                        id uuid NOT NULL,
+                        dob date,
+                        email varchar(255) NOT NULL,
+                        first_name varchar(255),
+                        image_url varchar(255),
+                        last_name varchar(255),
+                        password varchar(255) NOT NULL,
+                        username varchar(255) NOT NULL,
+                        PRIMARY KEY (id)
 );
 
-create table video_details (
-                               video_id binary(16) not null,
+CREATE TABLE video_details (
+                               video_id uuid NOT NULL,
                                date_updated date,
                                date_uploaded date,
                                resource_url varchar(255),
                                video_name varchar(255),
-                               user_id binary(16) not null,
-                               primary key (video_id)
+                               user_id uuid NOT NULL,
+                               PRIMARY KEY (video_id)
 );
 
-CREATE TABLE `role` (
-                         `id` binary(16) NOT NULL,
-                         `name` varchar(45) NOT NULL,
-                         PRIMARY KEY (`id`)
+CREATE TABLE "role" (
+                        id uuid NOT NULL,
+                        name varchar(45) NOT NULL,
+                        PRIMARY KEY (id)
 );
 
-CREATE TABLE `users_roles` (
-                               `user_id` binary(16) NOT NULL,
-                               `role_id` binary(16) NOT NULL,
-                               KEY `user_fk_idx` (`user_id`),
-                               KEY `role_fk_idx` (`role_id`),
-                               CONSTRAINT `role_fk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
-                               CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+CREATE TABLE users_roles (
+                             user_id uuid NOT NULL,
+                             role_id uuid NOT NULL,
+                             CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES "user" (id),
+                             CONSTRAINT role_fk FOREIGN KEY (role_id) REFERENCES "role" (id),
+                             PRIMARY KEY (user_id, role_id)
 );
 
-CREATE TABLE `password_reset_token` (
-                                      `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                      `token` VARCHAR(255),
-                                      `user_id` BINARY(16) NOT NULL,
-                                      `expiry_date` TIMESTAMP,
-                                      FOREIGN KEY (`user_id`) REFERENCES user (`id`)
+CREATE TABLE password_reset_token (
+                                      id SERIAL PRIMARY KEY,
+                                      token VARCHAR(255),
+                                      user_id uuid NOT NULL,
+                                      expiry_date TIMESTAMP,
+                                      FOREIGN KEY (user_id) REFERENCES "user" (id)
 );
 
-alter table user
-    add constraint UKf9dvvibvpfsldnu8wh3enop4i unique (username, email);
-
-alter table role
-    add constraint uk_name unique (name);
-
-alter table comment
-    add constraint FK2frraphlrgpo8ex9s7ax6w62c
-        foreign key (video_id)
-            references video_details (video_id);
-
-alter table video_details
-    add constraint FKp0poy6glsosp1o674md5mjrxe
-        foreign key (user_id)
-            references user (id);
+ALTER TABLE "user" ADD CONSTRAINT unique_username_email UNIQUE (username, email);
+ALTER TABLE "role" ADD CONSTRAINT unique_name UNIQUE (name);
+ALTER TABLE comment ADD CONSTRAINT fk_comment_video FOREIGN KEY (video_id) REFERENCES video_details (video_id);
+ALTER TABLE video_details ADD CONSTRAINT fk_video_user FOREIGN KEY (user_id) REFERENCES "user" (id);
