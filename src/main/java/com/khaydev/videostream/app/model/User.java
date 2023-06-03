@@ -33,16 +33,18 @@ public class User {
     private UUID id;
 
     @NotNull
+    @NotBlank(message = "username is required")
     @Column(name = "username")
     private String username;
 
     @NotNull
+    @NotBlank(message = "password is required")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "first name is required")
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = "last name is required")
     private String lastName;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
@@ -61,6 +63,7 @@ public class User {
     private String email;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotBlank(message = "date of birth is required")
     private LocalDate dob;
 
     private String imageUrl;
