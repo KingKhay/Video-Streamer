@@ -1,6 +1,7 @@
 package com.khaydev.videostream.app.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class PasswordResetToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Pattern(regexp = "\\S+.*\\S+", message = "token cannot have leading or trailing spaces")
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
