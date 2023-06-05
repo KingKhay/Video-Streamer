@@ -27,7 +27,7 @@ public class Comment {
     )
     private UUID id;
 
-    @NotBlank
+    @NotBlank(message = "comment message is required")
     private String message;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
