@@ -60,6 +60,7 @@ public class User {
     @Email
     @NotNull
     @Column(name = "email")
+    @NotBlank(message = "email is required")
     private String email;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
