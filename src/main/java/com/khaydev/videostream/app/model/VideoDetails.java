@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -31,6 +32,7 @@ public class VideoDetails {
     private UUID videoId;
 
     @NotBlank(message = "video name is required")
+    @Pattern(regexp = "\\S+.*\\S+", message = "video name cannot have leading or trailing spaces")
     private String videoName;
 
     private String resourceUrl;
