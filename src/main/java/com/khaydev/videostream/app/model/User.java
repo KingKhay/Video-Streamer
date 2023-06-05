@@ -32,19 +32,22 @@ public class User {
     @Column
     private UUID id;
 
-    @NotNull
-    @NotBlank(message = "username is required")
+    @NotBlank(message = "Username is required")
+    @Pattern(regexp = "\\S+.*\\S+", message = "Username cannot have leading or trailing spaces")
     @Column(name = "username")
     private String username;
 
-    @NotNull
     @NotBlank(message = "password is required")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=.*\\S).{8,}$",
+            message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long")
     private String password;
 
     @NotBlank(message = "first name is required")
+    @Pattern(regexp = "\\S+.*\\S+", message = "first name cannot have leading or trailing spaces")
     private String firstName;
 
     @NotBlank(message = "last name is required")
+    @Pattern(regexp = "\\S+.*\\S+", message = "last name cannot have leading or trailing spaces")
     private String lastName;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
@@ -65,8 +68,10 @@ public class User {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @NotBlank(message = "date of birth is required")
+    @Pattern(regexp = "\\S+.*\\S+", message = "date cannot have leading or trailing spaces")
     private LocalDate dob;
 
+    @Pattern(regexp = "\\S+.*\\S+", message = "image url cannot have leading or trailing spaces")
     private String imageUrl;
 
 
