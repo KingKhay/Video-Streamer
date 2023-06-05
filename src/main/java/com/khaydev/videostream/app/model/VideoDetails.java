@@ -3,6 +3,7 @@ package com.khaydev.videostream.app.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -29,6 +30,7 @@ public class VideoDetails {
     @Column(name = "video_id")
     private UUID videoId;
 
+    @NotBlank(message = "video name is required")
     private String videoName;
 
     private String resourceUrl;
