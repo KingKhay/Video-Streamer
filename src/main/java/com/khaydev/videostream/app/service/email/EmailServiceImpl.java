@@ -42,7 +42,7 @@ public class EmailServiceImpl implements  EmailService{
         message.setRecipients(MimeMessage.RecipientType.TO, email.getTo());
         message.setSubject(email.getSubject());
 
-        File htmlFile = new ClassPathResource("data/password_reset.html").getFile();
+        File htmlFile = new ClassPathResource(templateFile).getFile();
         String htmlTemplate = new String(Files.readAllBytes(htmlFile.toPath()));
 
         for(Map.Entry<String, String> placeholder : placeholders.entrySet()){
