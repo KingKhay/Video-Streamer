@@ -8,6 +8,8 @@ import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.repository.RoleRepository;
 import com.khaydev.videostream.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class IAdminService implements AdminService {
 
     private final UserRepository userRepository;
 
-    private final String ADMIN_ROLE = "ROLE_ADMIN";
+    private static final String ADMIN_ROLE = "ROLE_ADMIN";
 
     @Override
     public Role createRole(RoleDTO roleDTO) {
@@ -42,11 +44,8 @@ public class IAdminService implements AdminService {
     }
 
     @Override
-    public List<User> findAllUsers() {
-        //Refactor to add Pagination
-        List<User> users = userRepository.findAll();
-
-        return users;
+    public Page<User> findAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override
