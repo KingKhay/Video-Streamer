@@ -3,6 +3,8 @@ package com.khaydev.videostream.app.controller.admin;
 import com.khaydev.videostream.app.dto.RoleDTO;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.service.admin.AdminService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +38,8 @@ public class AdminController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/users")
-    public ResponseEntity<List<User>> findAllUsers(){
-        List<User> users = service.findAllUsers();
+    public ResponseEntity<Page<User>> findAllUsers(Pageable pageable){
+        Page<User> users = service.findAllUsers(pageable);
         return ResponseEntity.ok(users);
     }
 
