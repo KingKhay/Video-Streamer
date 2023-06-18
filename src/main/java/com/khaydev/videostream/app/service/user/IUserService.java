@@ -62,11 +62,9 @@ public class IUserService implements  UserService{
     public List<UserDTO> searchUsersByUsername(String username){
 
         List<User> users = repository.findUsersByUsernameContainingIgnoreCase(username);
-        List<UserDTO> userDTOS = users.stream()
+        return users.stream()
                 .map(objectMapper::convertUserToUserDTO)
                 .toList();
-
-        return userDTOS;
     }
 
     @Override
