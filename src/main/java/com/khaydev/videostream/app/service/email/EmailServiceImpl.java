@@ -4,7 +4,6 @@ import com.khaydev.videostream.app.model.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.apache.bcel.util.ClassPath;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -24,17 +23,17 @@ public class EmailServiceImpl implements  EmailService{
     public void sendHtmlMail(Email email,String username) throws MessagingException, IOException {
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("${name}", username);
-        sendHTMLMail(email, "data/user_registration.html", placeholders);
+        sendHtmlMail(email, "data/user_registration.html", placeholders);
     }
 
     @Override
     public void sendPasswordResetMail(Email email, String token) throws MessagingException, IOException {
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("${token}", token);
-        sendHTMLMail(email, "data/password_reset.html", placeholders);
+        sendHtmlMail(email, "data/password_reset.html", placeholders);
     }
 
-    public void sendHTMLMail(Email email, String templateFile, Map<String, String> placeholders) throws MessagingException, IOException {
+    public void sendHtmlMail(Email email, String templateFile, Map<String, String> placeholders) throws MessagingException, IOException {
         MimeMessage message;
         message = emailSender.createMimeMessage();
 
