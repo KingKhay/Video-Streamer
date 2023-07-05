@@ -8,7 +8,6 @@ import com.khaydev.videostream.app.model.PasswordResetToken;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.repository.PasswordTokenRepository;
 import com.khaydev.videostream.app.repository.UserRepository;
-import com.khaydev.videostream.app.utils.mapper.EntityObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
