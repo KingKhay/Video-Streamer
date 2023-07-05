@@ -1,5 +1,6 @@
 package com.khaydev.videostream.app.service.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khaydev.videostream.app.dto.UserDTO;
 import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
@@ -18,9 +19,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class IUserService implements  UserService{
     private final UserRepository repository;
-    private final EntityObjectMapper objectMapper;
     private final PasswordTokenRepository passwordTokenRepository;
-
+    private final ObjectMapper mapper;
 
 
     @Override
@@ -28,7 +28,7 @@ public class IUserService implements  UserService{
         User user = repository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
-        return objectMapper.convertUserToUserDTO(user);
+        return mapper.convertValue(user, UserDTO.class);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class IUserService implements  UserService{
 
         repository.save(user);
 
-        return userDetails;
+        return mapper.convertValue(user, UserDTO.class);
     }
 
 
@@ -54,7 +54,7 @@ public class IUserService implements  UserService{
 
         return user.getVideosUploaded()
                 .stream()
-                .map(objectMapper::convertVideoDetailsToVideoDTO)
+                .map(video -> mapper.convertValue(video, VideoDTO.class))
                 .toList();
     }
 
@@ -63,7 +63,7 @@ public class IUserService implements  UserService{
 
         List<User> users = repository.findUsersByUsernameContainingIgnoreCase(username);
         return users.stream()
-                .map(objectMapper::convertUserToUserDTO)
+                .map(user -> mapper.convertValue(user, UserDTO.class))
                 .toList();
     }
 
