@@ -2,8 +2,10 @@ package com.khaydev.videostream.app.service.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khaydev.videostream.app.dto.UserDTO;
+import com.khaydev.videostream.app.dto.VideoDTO;
 import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.User;
+import com.khaydev.videostream.app.model.VideoDetails;
 import com.khaydev.videostream.app.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -110,5 +114,43 @@ class IUserServiceTest {
         });
 
         verify(mapper, never()).convertValue(any(), eq(UserDTO.class));
+    }
+
+    @Test
+    @DisplayName("Find_Videos_Of_User_Success")
+    void testFindVideosOfUser(){
+        UUID userId = UUID.randomUUID();
+
+        User user = new User();
+        user.setFirstName("Khay");
+
+        List<VideoDetails> videos = new ArrayList<>();
+        VideoDetails video1 = new VideoDetails();
+        video1.setVideoName("Video 1");
+        videos.add(video1);
+
+        VideoDetails video2 = new VideoDetails();
+        video2.setVideoName("Video 2");
+        videos.add(video2);
+
+        user.setVideosUploaded(videos);
+
+        VideoDTO videoDTO1 = new VideoDTO();
+        videoDTO1.setName("Video 1");
+        VideoDTO videoDTO2 = new VideoDTO();
+        videoDTO2.setName("Video 2");
+
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+
+        when(mapper.convertValue(any(), eq(VideoDTO.class))).thenReturn(videoDTO1, videoDTO2);
+
+        List<VideoDTO> result = userService.findVideos(userId);
+
+        assertNotNull(result);
+
+        assertEquals(2, result.size());
+
+        verify(repository, times(1)).findById(userId);
+        verify(mapper, times(2)).convertValue(any(), eq(VideoDTO.class));
     }
 }
