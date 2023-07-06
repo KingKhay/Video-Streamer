@@ -71,4 +71,44 @@ class IUserServiceTest {
         verify(mapper, never()).convertValue(any(), eq(UserDTO.class));
     }
 
+    @Test
+    @DisplayName("Update_User_Successful")
+    void testUpdateUserSuccess(){
+        UUID userId = UUID.randomUUID();
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFirstName("Khay");
+
+        User user = new User();
+        user.setId(userId);
+        user.setFirstName("Khay");
+
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+        when(repository.save(any())).thenReturn(user);
+        when(mapper.convertValue(any(), eq(UserDTO.class))).thenReturn(userDTO);
+
+        UserDTO result = userService.updateUser(userDTO, userId);
+
+        assertNotNull(result);
+        assertEquals(userDTO.getFirstName(), result.getFirstName());
+
+        verify(mapper, times(1)).convertValue(user, UserDTO.class);
+    }
+
+    @Test
+    @DisplayName("Update_User_User_Not_Found")
+    void testUpdateUser_UserNotFound(){
+        UUID userId = UUID.randomUUID();
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFirstName("Khay");
+
+        when(repository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> {
+            userService.updateUser(userDTO, userId);
+        });
+
+        verify(mapper, never()).convertValue(any(), eq(UserDTO.class));
+    }
 }
