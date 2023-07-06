@@ -2,6 +2,7 @@ package com.khaydev.videostream.app.service.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khaydev.videostream.app.dto.UserDTO;
+import com.khaydev.videostream.app.exception.user.UserNotFoundException;
 import com.khaydev.videostream.app.model.User;
 import com.khaydev.videostream.app.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,4 +56,19 @@ class IUserServiceTest {
 
         verify(repository, times(1)).findById(id);
     }
+
+    @Test
+    @DisplayName("Find_User_By_Id_User_Not_Found")
+    void testFindUserById_UserNotFound(){
+        UUID userId = UUID.randomUUID();
+
+        when(repository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> {
+           userService.findUserById(userId);
+        });
+
+        verify(mapper, never()).convertValue(any(), eq(UserDTO.class));
+    }
+
 }
