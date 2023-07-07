@@ -186,8 +186,8 @@ class IUserServiceTest {
     }
 
     @Test
-    @DisplayName("Search_Users_By_Username")
-    void testSearchByUsernameNotFound(){
+    @DisplayName("Search_Users_By_Username_No_Users_Found")
+    void testSearchByUsernameNoUsersFound(){
         String username = "khay";
 
         List<User> users = List.of();
