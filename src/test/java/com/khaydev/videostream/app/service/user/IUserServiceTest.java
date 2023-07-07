@@ -176,5 +176,28 @@ class IUserServiceTest {
 
         when(repository.findUsersByUsernameContainingIgnoreCase(username)).thenReturn(users);
         when(mapper.convertValue(any(), eq(UserDTO.class))).thenReturn(userDTO, secondUserDTO);
+
+        List<UserDTO> result = userService.searchUsersByUsername(username);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        verify(mapper, times(2)).convertValue(any(), eq(UserDTO.class));
+    }
+
+    @Test
+    @DisplayName("Search_Users_By_Username")
+    void testSearchByUsernameNotFound(){
+        String username = "khay";
+
+        List<User> users = List.of();
+        when(repository.findUsersByUsernameContainingIgnoreCase(username)).thenReturn(users);
+
+        List<UserDTO> result = userService.searchUsersByUsername(username);
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+
+        verify(mapper, never()).convertValue(any(), eq(UserDTO.class));
     }
 }
