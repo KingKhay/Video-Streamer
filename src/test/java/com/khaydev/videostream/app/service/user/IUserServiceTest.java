@@ -153,4 +153,28 @@ class IUserServiceTest {
         verify(repository, times(1)).findById(userId);
         verify(mapper, times(2)).convertValue(any(), eq(VideoDTO.class));
     }
+
+    @Test
+    @DisplayName("Search_Users_By_Username")
+    void testSearchUsersByUsername(){
+
+        String username = "khay";
+
+        User user = new User();
+        user.setUsername(username);
+
+        User secondUser = new User();
+        secondUser.setUsername(username);
+
+        List<User> users = List.of(user, secondUser);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(username);
+
+        UserDTO secondUserDTO = new UserDTO();
+        secondUserDTO.setUsername(username);
+
+        when(repository.findUsersByUsernameContainingIgnoreCase(username)).thenReturn(users);
+        when(mapper.convertValue(any(), eq(UserDTO.class))).thenReturn(userDTO, secondUserDTO);
+    }
 }
