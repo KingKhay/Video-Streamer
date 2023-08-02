@@ -1,0 +1,57 @@
+aws:
+  access-key: ${access.key}
+  secret-key: ${secret.key}
+bucket:
+  name: ${bucket.name}
+jwt:
+  secret: ${jwt.secret.key}
+logging:
+  file:
+    name: ${logfile_path}/${spring.application.name}.log
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+mail:
+  from: ${mail.from}
+server:
+  port: 8085
+spring:
+  application:
+    name: video-wave
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: ${datasource.password}
+    url: ${datasource.url}
+    username: ${datasource.username}
+  flyway:
+    baseline-on-migrate: true
+    password: ${datasource.password}
+    user: ${datasource.username}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  mail:
+    host: smtp.gmail.com
+    password: ${mail.password}
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    username: ${mail.username}
+  security:
+    user:
+      name: ${security.user}
+      password: ${security.password}
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
